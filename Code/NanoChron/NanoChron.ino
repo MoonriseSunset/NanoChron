@@ -24,12 +24,22 @@ This code is protected under GNU GPLv3
 #include "RTClib.h"
 #include "Adafruit_LTR329_LTR303.h"
 
-//Light Sensor related variables
+//Light Sensor variables
 int visible;
 uint16_t total, infra;
 int vmax = 10;
 int brange[] = {0, vmax/15, (2*vmax)/15, vmax/5, (4*vmax)/15, vmax/3, (2*vmax)/5, (7*vmax)/15, (8*vmax)/15, (3*vmax)/5, (2*vmax)/3, (11*vmax)/15, (4*vmax)/5, (13*vmax)/15, (14*vmax)/15, vmax};
 unsigned int bcounter;
+
+//RTC variables
+unsigned int s, m, h;
+
+//NTP Reference variables
+unsigned int sref, mref, href;
+
+//display/test variables
+unsigned int counter = 0;
+unsigned int Dtime;
 
 //Setting up all the libraries
 Adafruit_7segment display = Adafruit_7segment();
@@ -103,6 +113,24 @@ void setBright(){
   display.writeDisplay();
 }
 
+void TimeRef(){
+  Time.update();
+  sref = Time.getSeconds();
+  mref = Time.getMinutes();
+  href = Time.getHours();
+}
+
+void GetTime(){
+  DateTime hardware = rtc.now();
+  s = hardware.second();
+  m = hardware.minute();
+  h = hardware.hour();
+  if(h > 12){
+    h = h - 12;
+  }
+  Dtime = (h*100) + m;
+}
+
 void setup() {
   Serial.begin(115200); //for debug
 
@@ -118,26 +146,37 @@ void setup() {
 
   //Starting the 7 seg display
   display.begin(0x70);
+  
 
   //Starting the WiFi and NTP
- /* WiFi.begin(ssid, password);
+ WiFi.begin(ssid, password);
   while(WiFi.status() != WL_CONNECTED){
-    Serial.print("-");
-  }*/
-  display.print(8888);
-  display.writeDisplay();
+    //Serial.print("-");
+    delay(500);
+  }
 }
 
 void loop() {
-  if(light.newDataAvailable()){
-    light.readBothChannels(total,infra);
-    visible = abs(total-infra);
-    if(visible > vmax){
-      vmax = visible;
-      adjustBscale();
-      Serial.println(vmax);
+  if(DynamicBrightness == true){
+    
+    if(light.newDataAvailable()){
+      light.readBothChannels(total,infra);
+      visible = abs(total-infra);
+      
+      if(visible > vmax){
+        vmax = visible;
+        adjustBscale();
+        //Serial.println(vmax);
+        }
+      setBright();
+      }
     }
-    setBright();
-  }
+    
+    else{
+      display.setBrightness(Brightness);
+    }
+    GetTime();
+    display.print(Dtime);
+    display.writeDisplay();
 
 }
