@@ -39,7 +39,6 @@ unsigned int sref, mref, href;
 
 //display/test variables
 unsigned int counter = 0;
-unsigned int Dtime;
 
 //Setting up all the libraries
 Adafruit_7segment display = Adafruit_7segment();
@@ -115,9 +114,12 @@ void setBright(){
 
 void TimeRef(){
   Time.update();
+  DateTime hardware = rtc.now();
   sref = Time.getSeconds();
   mref = Time.getMinutes();
   href = Time.getHours();
+
+  rtc.adjust(DateTime(hardware.year(), hardware.month(), hardware.day(), href, mref, sref + 8));
 }
 
 void GetTime(){
@@ -125,10 +127,24 @@ void GetTime(){
   s = hardware.second();
   m = hardware.minute();
   h = hardware.hour();
-  if(h > 12){
+  if(h > 12 and hourmode == true){
     h = h - 12;
   }
-  Dtime = (h*100) + m;
+
+  if(h >= 10){
+    display.writeDigitNum(0, h/10);
+    display.writeDigitNum(1, (h%10));
+    display.drawColon(1);
+    display.writeDigitNum(3, (m/10));
+    display.writeDigitNum(4, (m%10));
+  }
+  else{
+    display.writeDigitNum(1, (h));
+    display.drawColon(1);
+    display.writeDigitNum(3, (m/10));
+    display.writeDigitNum(4, (m%10));
+  }
+  display.writeDisplay();
 }
 
 void setup() {
@@ -136,7 +152,7 @@ void setup() {
 
   //Starting the DS3231 onboard RTC and setting the time to when the sketch was uploaded
   rtc.begin();
-  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
 
   //Starting the light sensor
   light.begin();
@@ -147,12 +163,19 @@ void setup() {
   //Starting the 7 seg display
   display.begin(0x70);
   
-
   //Starting the WiFi and NTP
  WiFi.begin(ssid, password);
   while(WiFi.status() != WL_CONNECTED){
     //Serial.print("-");
     delay(500);
+  }
+
+  //Doing an intial sync from the NTP to the RTC
+  TimeRef();
+
+  //Set and forget the brightness for the display if dynamic brightness is turned off
+  if(DynamicBrightness == false){
+    display.setBrightness(Brightness);
   }
 }
 
@@ -171,12 +194,9 @@ void loop() {
       setBright();
       }
     }
-    
-    else{
-      display.setBrightness(Brightness);
+    if(h == 12 and m == 30){
+      TimeRef();
     }
     GetTime();
-    display.print(Dtime);
-    display.writeDisplay();
-
+    
 }
