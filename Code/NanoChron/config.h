@@ -1,11 +1,14 @@
-//Enter in the timezone offset from UTC to your timezone, make sure to NOT include the Daylight Saving offset into the number.
-#define Timezone 0
-//If set to true, the clock will display 12 hours instead of 24.
-#define hourmode true
-#define DSTEnable true
-//Wifi info goes into the strings below
-const char * ssid = "";
-const char * password = "";
-//Brightness settings, the Brightness can be set to a value from 0-15, inclusive
-#define DynamicBrightness true
-#define Brightness 15
+// Enter your timezone offset here (for example: PST is -8), DO NOT include the daylight savings offset.
+#define TIMEZONE            0
+
+// If HOURS_12 is set to true the clock will display 12 hours instead of 24.
+#define HOURS_12            true
+#define ENABLE_DST          true
+
+// Wi-Fi information goes here!
+#define SSID                "";
+#define PASSWORD            "";
+
+// Brightness settings, BRIGHTNESS should be a value from 0-15 inclusive
+#define DYNAMIC_BRIGHTNESS  true
+#define BRIGHTNESS          15
