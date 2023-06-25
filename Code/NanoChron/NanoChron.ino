@@ -42,7 +42,7 @@ int brange[] = {0, vmax / 15, (2 * vmax) / 15, vmax / 5, (4 * vmax) / 15, vmax /
 unsigned int bcounter;
 
 //RTC variables
-unsigned int s, m, h;
+unsigned int s, m, h, day, month, dow;
 
 //NTP Reference variables
 unsigned int sref, mref, href;
@@ -124,12 +124,35 @@ void setBright() {
   display.writeDisplay();
 }
 
+//this module of code was taken from https://stackoverflow.com/questions/5590429/calculating-daylight-saving-time-from-only-date (and modified a little so it works here)
+bool IsDST(int day, int month, int dow){
+    //January, february, and december are out.
+    if (month < 3 || month > 11) { return false; }
+    //April to October are in
+    if (month > 3 && month < 11) { return true; }
+    int previousSunday = day - dow;
+    //In march, we are DST if our previous sunday was on or after the 8th.
+    if (month == 3) { return previousSunday >= 8; }
+    //In november we must be before the first sunday to be dst.
+    //That means the previous sunday must be before the 1st.
+    return previousSunday <= 0;
+}
+
 void TimeRef() {
   Time.update();
   DateTime hardware = rtc.now();
   sref = Time.getSeconds();
   mref = Time.getMinutes();
   href = Time.getHours();
+  if(DSTEnable == true){
+    DateTime hardware = rtc.now();
+    day = hardware.day();
+    month = hardware.month();
+    dow = hardware.dayOfTheWeek();
+    if(IsDST(day, month, dow) == true){
+      href += 1;
+    }
+  }
 
   rtc.adjust(DateTime(hardware.year(), hardware.month(), hardware.day(), href, mref, sref + 8));
 }
@@ -139,7 +162,7 @@ void GetTime() {
   s = hardware.second();
   m = hardware.minute();
   h = hardware.hour();
-  if (h >= 13 and hourmode == true) {
+  if (h > 13 and hourmode == true) {
     h = h - 12;
   }
   display.clear();
