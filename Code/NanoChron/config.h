@@ -6,8 +6,8 @@
 #define ENABLE_DST          true
 
 // Wi-Fi information goes here!
-#define SSID                "";
-#define PASSWORD            "";
+#define SSID                ""
+#define PASSWORD            ""
 
 // Brightness settings, BRIGHTNESS should be a value from 0-15 inclusive
 #define DYNAMIC_BRIGHTNESS  true

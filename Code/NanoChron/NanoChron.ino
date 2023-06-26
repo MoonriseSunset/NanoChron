@@ -1,7 +1,7 @@
 /******************************************
   NanoChron
 
-  Written by Adam E. (Moonrise_Sunset)
+  Written by Adam E. (Moonrise_Sunset) and Seth H. (MoreFoxBeans)
 
   Big thanks to Adafruit for making it so easy to use all these sensors :)
 

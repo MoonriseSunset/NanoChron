@@ -1,12 +1,11 @@
 # NanoChron
 ## Tiny but stupid accurate clock
 
-I'll add files to this repo in the coming weeks so look out for that :)
+
 
 This project has been one I've been procrastinating on for a bit but I think I'll be able to finish it soon. NanoChron came about when I decided to make a replacement clock after an analog clock in my bathroom broke, which turned into a project encompassing 2 of my interests: Code and 3D Design/Printing.
 
 The beauty of this clock is that all the sensors and display are run purely through I2C, there are no other connections, and it only requires minimal soldering. This is achieved by implementing Adafruit's STEMMA QT connectors and essentially just daisy-chaining all the components through the interface 😆.
-
 
 The Setup
 ---
@@ -28,3 +27,5 @@ The Code
 ---
 
 I designed (is that the right word idk) the code to be as easy to work with as possible, with all the timezone/time, brightness, and WiFi settings located on the **config.h** file, none of the main arduino code needs to be modified 😄.
+
+Big thanks to my friend Seth ([MoreFoxBeans](https://github.com/MoreFoxBeans)) for optimizing my goofy ah code :)
