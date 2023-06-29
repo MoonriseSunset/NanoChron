@@ -7,6 +7,8 @@ This project has been one I've been procrastinating on for a bit but I think I'l
 
 The beauty of this clock is that all the sensors and display are run purely through I2C, there are no other connections, and it only requires minimal soldering. This is achieved by implementing Adafruit's STEMMA QT connectors and essentially just daisy-chaining all the components through the interface 😆.
 
+**Note: the 3d printed housing is still WIP, it should be done soon**
+
 The Setup
 ---
 
@@ -19,7 +21,7 @@ The Setup
 + [Stemma QT Connectors](https://www.adafruit.com/product/4399)
 
 ---
-**Note that this project does require a small amount of soldering**
+**Note that this project does require a small amount of soldering and 3d printing**
 
 [Here](https://learn.adafruit.com/adafruit-led-backpack/0-dot-56-seven-segment-backpack-assembly "Instructions") are the instructions on how to solder the 7 segment display, **DON'T solder the 4 pin header, only solder the 7 seg display to the backpack board,** we don't need it and it may prevent the board from fitting into the 3dp board housing (coming soon lol).
 
@@ -27,5 +29,3 @@ The Code
 ---
 
 I designed (is that the right word idk) the code to be as easy to work with as possible, with all the timezone/time, brightness, and WiFi settings located on the **config.h** file, none of the main arduino code needs to be modified 😄.
-
-Big thanks to my friend Seth ([MoreFoxBeans](https://github.com/MoreFoxBeans)) for optimizing my goofy ah code :)
