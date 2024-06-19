@@ -2,6 +2,10 @@
 ## Tiny but stupid accurate clock
 
 
+# NOTE:
+
+**Archiving NanoChron most likely indefinitely, I may come back to it sometime in the future, but not for now.**
+
 
 This project has been one I've been procrastinating on for a bit but I think I'll be able to finish it soon. NanoChron came about when I decided to make a replacement clock after an analog clock in my bathroom broke, which turned into a project encompassing 2 of my interests: Code and 3D Design/Printing.
 
